@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+
+    <title>Vue-3</title>
+    <style>
+        body{
+            background-color: #c7eaea;
+        }
+        .text-red{
+            color: red;
+        }
+        .text-green{
+            color: green;
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="myApp3" class="container">
+    <!--    <h4>{{header}}</h4>-->
+    <!--    <input type="text" v-model="header">-->
+    <div class="card mt-5">
+        <div class="card-header card-title">
+            {{topicTitle}}
+        </div>
+        <div class="card-body">
+            <section class="mb-2 border">
+                <h5 class="p-2">Assignment List</h5>
+                <ul>
+                    <li  v-for="assignment in incompleteAssignment">
+                        <label>{{assignment.topic}}<input :key="assignment.id" v-model="assignment.complete" class="ml-1"  type="checkbox"></label>
+                    </li>
+                </ul>
+            </section>
+
+            <section v-show="completedAssignment" class="mb-2 border">
+                <h5 class="p-2">Assignment Completed List</h5>
+                <ul>
+                    <li  v-for="assignment in assignments.filter(a => a.complete)">
+                        <label>{{assignment.topic}}<input :key="assignment.id" v-model="assignment.complete" class="ml-1"  type="checkbox"></label>
+                    </li>
+                </ul>
+            </section>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+
+<script src="https://unpkg.com/vue@3"></script>
+
+<script>
+    let app = {
+        data(){
+            return {
+                topicTitle : "List Condition and computed properties",
+                assignments:[
+                    {id:1,topic:'Read Chapter 01',complete:false},
+                    {id:2,topic:'Read Chapter 02',complete:false},
+                    {id:3,topic:'Read Chapter 03',complete:false},
+                    {id:4,topic:'Read Chapter 04',complete:false},
+                    {id:5,topic:'Read Chapter 05',complete:false},
+                ],
+            }
+        },
+        computed:{
+            incompleteAssignment(){
+                return this.assignments.filter(a => !a.complete);
+            },
+            completedAssignment(){
+                return this.assignments.filter(a => a.complete);
+            }
+        }
+
+    };
+
+    Vue.createApp(app).mount("#myApp3")
+
+</script>
+</body>
+</html>
