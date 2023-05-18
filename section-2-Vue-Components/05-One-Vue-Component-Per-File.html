@@ -24,7 +24,7 @@
 </head>
 <body>
 
-<div id="myApp" class="container">
+<div id="sectionTwo" class="container">
     <!--    <h4>{{header}}</h4>-->
     <!--    <input type="text" v-model="header">-->
     <div class="card mt-5">
@@ -33,37 +33,12 @@
         </div>
         <div class="card-body">
             <section class="mb-2 mt-2 p-2 border">
-                <h5 class="p-1">Add Assignment</h5>
-                <div class="row mb-2">
-                    <div class="col-9">
-                        <input @keyup.enter="saveAssignment"  v-model="assignment" type="text" class="form-control">
-                    </div>
-                    <div class="col-3">
-                        <button @click="saveAssignment" class="btn btn-block btn-success">Add</button>
-                    </div>
-                </div>
-            </section>
-
-            <section class="mb-2 border">
-                <h5 class="p-3">Assignment List</h5>
-                <ul>
-                    <li v-for="topic in incompleteAssignTopics">
-                        <label>{{topic.name}} <input v-model="topic.complete" type="checkbox" :key="topic.id"></label>
-                    </li>
-                </ul>
-            </section>
-
-            <section v-show="completeAssignmentTopic.length"  class="mb-2 border">
-                <h5 class="p-2">Assignment Completed List</h5>
-                <ul>
-                    <li v-for="topic in completeAssignmentTopic">
-                        <label>{{topic.name}} <input type="checkbox" :key="topic.id" v-model="topic.complete"></label>
-                    </li>
-                </ul>
+                <app-button>Click Component</app-button>
             </section>
 
         </div>
     </div>
+
 </div>
 
 
@@ -75,79 +50,37 @@
 
 <script>
 
-    let app = {
-        data(){
-            return {
-                practiseTitle: 'Section 01 Prac',
-                assignment: ' ',
-                assignTopics:[
-                    // {id:1,name:'Topic name 01',complete:false},
-                    // {id:2,name:'Topic name 02',complete:false},
-                    // {id:3,name:'Topic name 03',complete:false},
-                    // {id:4,name:'Topic name 04',complete:false},
-                ],
-            }
-        },
-        methods:{
-            saveAssignment(){
-               const  topic = this.assignTopics.find((item) => item.name?.trim() === this.assignment?.trim());
-                if (topic){
-                  return   Swal.fire({
-                        title: 'Error!',
-                        text: 'This Assignment Already Been Added',
-                        icon: 'error',
-                        confirmButtonText: 'Exit'
-                    })
-                    //alert('match')
-                    //console.log( this.assignTopics);
-                }
+    const app1 = {
+       data(){
+           return {
+              'practiseTitle' : 'One Vue Component Per File',
+           }
+       },
+        components: {
+           'app-button':{
+               template: `
+                <button
+                class="btn btn-block btn-success"
+                :disabled="processing"
+                >
+                <slot></slot>
+                </button>
+               ` ,
+               data() {
+                   return {
+                       processing : false,
+                   };
+               }
 
-                if (this.assignment?.trim() === ''){
-                  return   Swal.fire({
-                        title: 'Please Add Assignment',
-                        showClass: {
-                            popup: 'animate__animated animate__fadeInDown'
-                        },
-                        hideClass: {
-                            popup: 'animate__animated animate__fadeOutUp'
-                        }
-                    })
-                }
 
-                if (this.assignment?.trim() !== ''){
-                    this.assignTopics.push(
-                        {
-                            id:this.assignTopics.length+1,
-                            name: this.assignment,
-                            complete: false,
-                        }
-                    );
-                    this.assignment = '';
-                    Swal.fire({
-                        position: 'top-end',
-                        icon: 'success',
-                        title: 'Your Assignment Has Been Added',
-                        showConfirmButton: false,
-                        timer: 1000
-                    })
-                }
-
-            },
-        },
-        computed: {
-            incompleteAssignTopics(){
-                return this.assignTopics.filter(function (item){
-                    return item.complete !== true;
-                });
-            },
-            completeAssignmentTopic(){
-                return this.assignTopics.filter( a => a.complete );
-            }
+               // mounted() {
+               //     alert('okk');
+               // }
+           }
         }
-    }
+    };
 
-   Vue.createApp(app).mount("#myApp");
-
+    Vue.createApp(app1).mount("#sectionTwo");
 </script>
 </body>
 </html>
