@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <title>Vue-3</title>
+    <style>
+        body{
+            background-color: #c7eaea;
+        }
+        .text-red{
+            color: red;
+        }
+        .text-green{
+            color: green;
+        }
+    </style>
+
+</head>
+<body>
+
+<div id="myApp" class="container">
+    <!--    <h4>{{header}}</h4>-->
+    <!--    <input type="text" v-model="header">-->
+    <div class="card mt-5">
+        <div class="card-header card-title">
+            {{practiseTitle}}
+        </div>
+        <div class="card-body">
+            <section class="mb-2 mt-2 p-2 border">
+                <h5 class="p-1">Add Assignment</h5>
+                <div class="row mb-2">
+                    <div class="col-9">
+                        <input @keyup.enter="saveAssignment"  v-model="assignment" type="text" class="form-control">
+                    </div>
+                    <div class="col-3">
+                        <button @click="saveAssignment" class="btn btn-block btn-success">Add</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mb-2 border">
+                <h5 class="p-3">Assignment List</h5>
+                <ul>
+                    <li v-for="topic in incompleteAssignTopics">
+                        <label>{{topic.name}} <input v-model="topic.complete" type="checkbox" :key="topic.id"></label>
+                    </li>
+                </ul>
+            </section>
+
+            <section v-show="completeAssignmentTopic.length"  class="mb-2 border">
+                <h5 class="p-2">Assignment Completed List</h5>
+                <ul>
+                    <li v-for="topic in completeAssignmentTopic">
+                        <label>{{topic.name}} <input type="checkbox" :key="topic.id" v-model="topic.complete"></label>
+                    </li>
+                </ul>
+            </section>
+
+        </div>
+    </div>
+</div>
+
+
+<!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://unpkg.com/vue@3"></script>
+
+<script>
+
+    let app = {
+        data(){
+            return {
+                practiseTitle: 'Section 01 Prac',
+                assignment: ' ',
+                assignTopics:[
+                    // {id:1,name:'Topic name 01',complete:false},
+                    // {id:2,name:'Topic name 02',complete:false},
+                    // {id:3,name:'Topic name 03',complete:false},
+                    // {id:4,name:'Topic name 04',complete:false},
+                ],
+            }
+        },
+        methods:{
+            saveAssignment(){
+               const  topic = this.assignTopics.find((item) => item.name?.trim() === this.assignment?.trim());
+                if (topic){
+                  return   Swal.fire({
+                        title: 'Error!',
+                        text: 'This Assignment Already Been Added',
+                        icon: 'error',
+                        confirmButtonText: 'Exit'
+                    })
+                    //alert('match')
+                    //console.log( this.assignTopics);
+                }
+
+                if (this.assignment?.trim() === ''){
+                  return   Swal.fire({
+                        title: 'Please Add Assignment',
+                        showClass: {
+                            popup: 'animate__animated animate__fadeInDown'
+                        },
+                        hideClass: {
+                            popup: 'animate__animated animate__fadeOutUp'
+                        }
+                    })
+                }
+
+                if (this.assignment?.trim() !== ''){
+                    this.assignTopics.push(
+                        {
+                            id:this.assignTopics.length+1,
+                            name: this.assignment,
+                            complete: false,
+                        }
+                    );
+                    this.assignment = '';
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Your Assignment Has Been Added',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+                }
+
+            },
+        },
+        computed: {
+            incompleteAssignTopics(){
+                return this.assignTopics.filter(function (item){
+                    return item.complete !== true;
+                });
+            },
+            completeAssignmentTopic(){
+                return this.assignTopics.filter( a => a.complete );
+            }
+        }
+    }
+
+   Vue.createApp(app).mount("#myApp");
+
+</script>
+</body>
+</html>
